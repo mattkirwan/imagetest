@@ -1,7 +1,6 @@
 package main
 
 import (
-    // "fmt"
     "os"
     "image/draw"
     "image"
