@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
     "os"
     "image/draw"
     "image"
@@ -9,22 +10,45 @@ import (
 )
 
 func main() {
-    fImg1, _ := os.Open("arrow1.jpg")
-    defer fImg1.Close()
-    img1, _, _ := image.Decode(fImg1)
 
-    fImg2, _ := os.Open("arrow2.jpg")
-    defer fImg2.Close()
-    img2, _, _ := image.Decode(fImg2)
+    fileImg1, err := os.Open("img_1.jpg")
+    defer fileImg1.Close()
 
-    m := image.NewRGBA(image.Rect(0, 0, 800, 600))
-    draw.Draw(m, m.Bounds(), img1, image.Point{0,0}, draw.Src)
-    //draw.Draw(m, m.Bounds(), img2, image.Point{-200,-200}, draw.Src)
+    if err != nil {
+    	log.Fatal(err)
+    }
 
-    graphics.Rotate(m, img2, &graphics.RotateOptions{3.5})
+    img1, _, err := image.Decode(fileImg1)
 
-    toimg, _ := os.Create("new.jpg")
+    if err != nil {
+    	log.Fatal(err)
+    }
+
+    fileImg2, err := os.Open("img_2.jpg")
+    defer fileImg2.Close()
+
+    if err != nil {
+    	log.Fatal(err)
+    }
+
+    img2, _, err := image.Decode(fileImg2)
+
+    if err != nil {
+    	log.Fatal(err)
+    }
+
+    placeholderImg := image.NewRGBA(image.Rect(0, 0, 700, 500))
+
+    draw.Draw(placeholderImg, placeholderImg.Bounds(), img1, image.Point{0,0}, draw.Src)
+
+    graphics.Rotate(placeholderImg, img2, &graphics.RotateOptions{1})
+
+    toimg, err := os.Create("output.jpg")
     defer toimg.Close()
 
-    jpeg.Encode(toimg, m, &jpeg.Options{jpeg.DefaultQuality})
+    if err != nil {
+    	log.Fatal(err)
+    }
+
+    jpeg.Encode(toimg, placeholderImg, &jpeg.Options{jpeg.DefaultQuality})
 }
