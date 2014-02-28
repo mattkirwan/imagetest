@@ -20,6 +20,7 @@ func main() {
     m := image.NewRGBA(image.Rect(0, 0, 800, 600))
     draw.Draw(m, m.Bounds(), img1, image.Point{0,0}, draw.Src)
     //draw.Draw(m, m.Bounds(), img2, image.Point{-200,-200}, draw.Src)
+
     graphics.Rotate(m, img2, &graphics.RotateOptions{3.5})
 
     toimg, _ := os.Create("new.jpg")
