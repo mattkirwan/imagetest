@@ -2,12 +2,19 @@ package main
 
 import (
 	"log"
+	"fmt"
 	"os"
 	"image/draw"
 	"image"
 	"image/jpeg"
 	"code.google.com/p/graphics-go/graphics"
+	"net/http"
+	"io/ioutil"
 )
+
+func handler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "<img src='%s' />", "output.jpg")
+}
 
 func main() {
 
@@ -51,4 +58,8 @@ func main() {
 	}
 
 	jpeg.Encode(toimg, placeholderImg, &jpeg.Options{jpeg.DefaultQuality})
+
+	http.HandleFunc("/", handler)
+
+	http.ListenAndServe(":8080", nil)	
 }
